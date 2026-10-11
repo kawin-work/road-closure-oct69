@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ถนนที่เสนอห้ามเดินรถ 12–18 ต.ค. 69 รอบศูนย์สิริกิติ์</title>
+<meta name="description" content="แผนที่ถนนที่เสนอห้ามเดินรถทุกชนิด ช่วงประชุมประจำปี IMF และธนาคารโลก 12–18 ตุลาคม 2569">
+<meta property="og:title" content="ถนนที่เสนอห้ามเดินรถ 12–18 ต.ค. 69">
+<meta property="og:description" content="พระราม 4, ดวงพิทักษ์, รัชดาภิเษก, สุขุมวิท, สะพานข้ามแยก ณ ระนอง และวิทยุ">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+:root{--red:#D7261E;--ink:#1F2A33;--muted:#5B6670;--paper:#FFFFFF;--rule:#E3E6E8;--tfac:#2B3A8C;--venue:#0F7C6E}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+#map{position:absolute;inset:0;background:#EEF0F1}
+.panel{position:absolute;z-index:1000;left:12px;top:12px;width:340px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);overflow:auto;background:var(--paper);border-radius:14px;box-shadow:0 2px 14px rgba(31,42,51,.2);padding:16px 16px 12px}
+.head{display:flex;align-items:flex-start;gap:8px}
+h1{flex:1;font-size:20px;line-height:1.3;margin:0 0 4px;font-weight:600}
+.when{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.55}
+.when strong{color:var(--red);font-weight:600}
+ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+li button{all:unset;box-sizing:border-box;display:flex;gap:12px;width:100%;padding:9px 2px;border-bottom:1px solid var(--rule);cursor:pointer;font-size:15px;line-height:1.4}
+li button:hover .nm{text-decoration:underline}
+li button:focus-visible,.toggle:focus-visible{outline:2px solid var(--tfac);outline-offset:2px;border-radius:4px}
+.sw{flex:none;width:20px;height:0;margin-top:10px;border-top:5px solid var(--red);border-radius:3px}
+.sw.dash{border-top-style:dashed}
+li small{display:block;color:var(--muted);font-size:13px}
+.keys{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0 6px;font-size:13px;color:var(--muted)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.note{font-size:12px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+.toggle{display:none;flex:none;font:inherit;font-size:13px;color:var(--tfac);background:none;border:1px solid var(--rule);border-radius:8px;padding:4px 10px;cursor:pointer}
+.leaflet-tooltip.lbl{font-family:inherit;font-size:13px;font-weight:500;padding:3px 8px;border-radius:6px;border:none;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.leaflet-popup-content{font-family:"IBM Plex Sans Thai",system-ui,sans-serif;font-size:14px;line-height:1.5;margin:10px 14px}
+.leaflet-popup-content b{font-weight:600}
+.status{font-size:12px;color:var(--muted);margin:6px 0 0}
+@media (max-width:640px){
+  .panel{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-width:none;max-height:52vh}
+  h1{font-size:18px}
+  .toggle{display:block}
+  .panel.collapsed ol,.panel.collapsed .keys,.panel.collapsed .note,.panel.collapsed .status{display:none}
+  .panel.collapsed .when{margin-bottom:0}
+}
+</style>
+</head>
+<body>
+<div id="map" role="region" aria-label="แผนที่ถนนที่เสนอห้ามเดินรถ"></div>
+
+<aside class="panel" id="panel">
+  <div class="head">
+    <h1>ถนนที่เสนอห้ามเดินรถทุกชนิด</h1>
+    <button class="toggle" id="toggle" aria-expanded="true" aria-controls="list">ซ่อนรายการ</button>
+  </div>
+  <p class="when"><strong>12 ต.ค. 69 เวลา 00.01 น. ถึง 18 ต.ค. 69 เวลา 24.00 น.</strong><br>ช่วงประชุมประจำปี IMF และธนาคารโลก ห้ามทั้งสองฝั่งถนน</p>
+  <ol id="list"></ol>
+  <div class="keys">
+    <span><span class="dot" style="background:var(--tfac)"></span>สภาวิชาชีพบัญชี</span>
+    <span><span class="dot" style="background:var(--venue)"></span>ศูนย์สิริกิติ์ (สถานที่ประชุม)</span>
+  </div>
+  <p class="note">อ้างอิงบันทึกข้อความ สน.ลุมพินี ลงวันที่ 10 ต.ค. 2569 ซึ่งเป็นข้อเสนอขอออกประกาศ โปรดตรวจสอบประกาศฉบับจริงจากตำรวจจราจรก่อนเดินทาง เส้นบนแผนที่เป็นแนวโดยประมาณ แตะชื่อถนนเพื่อซูมไปดู</p>
+  <p class="status" id="status" aria-live="polite"></p>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const ROADS = [
+  { name: "ถ.พระราม 4", range: "แยกวิทยุ ถึงแยกพระราม 4 (แยก ณ ระนอง)",
+    pts: [[13.7263,100.5455],[13.7222,100.5537],[13.7203,100.5593]] },
+  { name: "ถ.ดวงพิทักษ์", range: "ตลอดสาย ถนนพระราม 4 ถึงถนนสุขุมวิท",
+    pts: [[13.7236,100.5521],[13.7327,100.5519],[13.7414,100.5512]] },
+  { name: "ถ.รัชดาภิเษก", range: "แยกพระราม 4 ถึงแยกอโศกมนตรี",
+    pts: [[13.7203,100.5593],[13.7265,100.5602],[13.7364,100.5613]] },
+  { name: "ถ.สุขุมวิท", range: "แยกใต้ทางด่วนเพลินจิต ถึงแยกอโศกมนตรี",
+    pts: [[13.7428,100.5504],[13.7405,100.5551],[13.7364,100.5613]] },
+  { name: "สะพานข้ามแยก ณ ระนอง", range: "หน้าโรงเรียนช่องนนทรี ถึงหน้าศูนย์สิริกิติ์",
+    pts: [[13.7183,100.5594],[13.7235,100.5601]], dashed: true, noSnap: true },
+  { name: "ถ.วิทยุ", range: "แยกวิทยุ ถึงแยกสารสิน",
+    pts: [[13.7263,100.5455],[13.7280,100.5447],[13.7338,100.5447]] }
+];
+
+const PLACES = [
+  { name: "สภาวิชาชีพบัญชี", sub: "133 ถ.สุขุมวิท ใกล้แยกอโศกมนตรี", at: [13.7396,100.5617], color: "#2B3A8C", dir: "right" },
+  { name: "ศูนย์สิริกิติ์", sub: "สถานที่จัดประชุม", at: [13.7245,100.5590], color: "#0F7C6E", dir: "left" }
+];
+
+const WHEN = "12 ต.ค. 69 00.01 น. ถึง 18 ต.ค. 69 24.00 น.";
+const mobile = matchMedia("(max-width:640px)").matches;
+
+const map = L.map("map", { zoomControl: false, attributionControl: false, tap: true });
+L.control.zoom({ position: mobile ? "topright" : "bottomright" }).addTo(map);
+L.control.attribution({ position: mobile ? "topleft" : "bottomright", prefix: false })
+  .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>, เส้นทาง: OSRM')
+  .addTo(map);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", { maxZoom: 19, subdomains: "abcd" }).addTo(map);
+
+const layers = ROADS.map(r => {
+  const casing = L.polyline(r.pts, { color: "#fff", weight: 10, opacity: .9, lineCap: "round", lineJoin: "round" }).addTo(map);
+  const line = L.polyline(r.pts, { color: "#D7261E", weight: 6, opacity: .95, lineCap: "round", lineJoin: "round", dashArray: r.dashed ? "10 8" : null }).addTo(map);
+  const html = `<b>${r.name}</b><br>${r.range}<br><span style="color:#5B6670">ห้ามเดินรถทุกชนิด ทั้งสองฝั่ง<br>${WHEN}</span>`;
+  line.bindPopup(html); casing.bindPopup(html);
+  return { casing, line };
+});
+
+PLACES.forEach(p => {
+  L.circleMarker(p.at, { radius: 8, color: "#fff", weight: 3, fillColor: p.color, fillOpacity: 1 })
+    .bindTooltip(p.name, { permanent: true, direction: p.dir, offset: [p.dir === "right" ? 10 : -10, 0], className: "lbl" })
+    .bindPopup(`<b>${p.name}</b><br>${p.sub}`)
+    .addTo(map);
+});
+
+const list = document.getElementById("list");
+ROADS.forEach((r, i) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<button type="button"><span class="sw${r.dashed ? " dash" : ""}"></span><span><span class="nm">${r.name}</span><small>${r.range}</small></span></button>`;
+  li.querySelector("button").addEventListener("click", () => {
+    const b = layers[i].line.getBounds();
+    map.fitBounds(b, fitPad(), { maxZoom: 17 });
+    layers[i].line.openPopup(b.getCenter());
+    if (mobile) setCollapsed(true);
+  });
+  list.appendChild(li);
+});
+
+const panel = document.getElementById("panel");
+const toggle = document.getElementById("toggle");
+function setCollapsed(c) {
+  panel.classList.toggle("collapsed", c);
+  toggle.setAttribute("aria-expanded", String(!c));
+  toggle.textContent = c ? "แสดงรายการ" : "ซ่อนรายการ";
+}
+toggle.addEventListener("click", () => setCollapsed(!panel.classList.contains("collapsed")));
+
+function fitPad() {
+  return mobile
+    ? { paddingTopLeft: [20, 60], paddingBottomRight: [20, panel.offsetHeight + 20] }
+    : { paddingTopLeft: [panel.offsetWidth + 36, 30], paddingBottomRight: [40, 30] };
+}
+const all = L.featureGroup(layers.map(l => l.line).concat(PLACES.map(p => L.marker(p.at))));
+map.fitBounds(all.getBounds(), fitPad());
+
+function km(a, b) {
+  const R = 6371, d = Math.PI / 180;
+  const x = Math.sin((b[0] - a[0]) * d / 2) ** 2 + Math.cos(a[0] * d) * Math.cos(b[0] * d) * Math.sin((b[1] - a[1]) * d / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+async function snap(r) {
+  const coords = r.pts.map(p => `${p[1]},${p[0]}`).join(";");
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`, { signal: ctrl.signal });
+    const j = await res.json();
+    if (j.code !== "Ok") return null;
+    let straight = 0;
+    for (let i = 1; i < r.pts.length; i++) straight += km(r.pts[i - 1], r.pts[i]);
+    if (j.routes[0].distance / 1000 > straight * 1.4 + 0.2) return null;
+    return j.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+  } catch (e) { return null; } finally { clearTimeout(t); }
+}
+(async () => {
+  let ok = 0, tried = 0;
+  for (let i = 0; i < ROADS.length; i++) {
+    if (ROADS[i].noSnap) continue;
+    tried++;
+    const g = await snap(ROADS[i]);
+    if (g) { layers[i].casing.setLatLngs(g); layers[i].line.setLatLngs(g); ok++; }
+  }
+  if (ok < tried) document.getElementById("status").textContent = "บางเส้นแสดงเป็นแนวตรงโดยประมาณ เพราะดึงแนวถนนจริงไม่สำเร็จ";
+})();
+</script>
+</body>
+</html>
